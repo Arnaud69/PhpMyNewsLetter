@@ -1,0 +1,18 @@
+=== CODES RETOURS ===
+*** CODE TRAITEMENT ***
+200 : traitement demandé OK (ajout mail OK, suppression OK, interrogation OK, ...)
+300 : pas de liste correspondante
+500 : non trouvé ou entrée déjà existante
+*** ERREURS ***
+198 : apis désactivées ou non actives.
+199 : erreur de / sur clé api (key)
+239 : suppression de la table des emails en erreur
+249 : ajout en table des emails supprimés en erreur
+299 : identifiant liste manquant (list_id)
+398 : incohérence list_id & email expéditeur
+399 : email expéditeur de liste manquant (SenderEmail), identification liste impossible, peut être corrigée en fournissant list_id
+499 : email contact manquant (ContactEmail)
+599 : email invalide (ex : arnaud@gmail)
+
+
+
