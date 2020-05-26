@@ -26,7 +26,7 @@ if($test_pj['CPT_TABLE_PJ']==0){
 		$cnx->query("ALTER TABLE `" . $table_global_config . "` ADD `table_upload` VARCHAR(255) NOT NULL DEFAULT ''");
 		$cnx->query("UPDATE " . $table_global_config . " SET table_upload='" . $name_table_pj . "'");
 	}else{
-		die("<div class='error'>" . tr("ERROR_SQL", $db->DbError() . "<br>Query:" . $sql) . "<br>".tr("INSTALL_REFRESH")."</div>");
+		die("<div class='error'>" . tr("ERROR_SQL", $db->error . "<br>Query:" . $sql) . "<br>".tr("INSTALL_REFRESH")."</div>");
 	}
 } else {
 	$_CONTINUE = true;
