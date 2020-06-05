@@ -99,7 +99,10 @@ if ( count( $list_crontab ) > 0 ) {
 				echo '<td><a data-toggle="modal" data-target="#modalPmnl" data-tooltip="tooltip" href="include/view_log.php?list_id='
 					.$x['list_id'].'&id_mail='.$x['msg_id'].'&t=l&token='
 					.$token.'" title="'. tr( "TRACKING_VIEW_LOG_SEND" ) .'">
-					<button type="button" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-search"></i></button></a></td>';
+					<button type="button" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-search"></i></button></a>
+					<a data-toggle="tooltip" href="dl.php?log=logs/list' . $x['list_id'] . '-msg' . $x['msg_id'] . '.txt&token='
+					. $token . '" title="Telecharger le fichier log de l\'envoi">
+					<button type="button" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-download-alt"></i></button></a></td>';
 			} else {
 				echo '<td style="padding-top:14px;">'.tr("SCHEDULE_NO_LOG").'.</td>';	 
 			}
