@@ -702,7 +702,9 @@ if($row_cnt['CPTID'] > 0){
 				if(is_file("logs/list$list_id-msg" . $row['id_mail'] . ".txt")){
 					echo '<td><a data-toggle="modal" data-target="#modalPmnl" data-tooltip="tooltip" href="include/view_log.php?list_id='
 						. $list_id . '&id_mail=' . $row['id_mail'] . '&t=l&token='
-						. $token . '" title="' . tr( "TRACKING_VIEW_LOG_SEND" ) .'"><i class="glyphicon glyphicon-search"></i></a></td>';
+						. $token . '" title="' . tr( "TRACKING_VIEW_LOG_SEND" ) .'"><i class="glyphicon glyphicon-search"></i></a>
+						&nbsp;<a data-toggle="tooltip" href="dl.php?log=logs/list' . $list_id . '-msg' . $row['id_mail'] . '.txt&token='
+						. $token . '" title="Telecharger le fichier log de l\'envoi"><i class="glyphicon glyphicon-download-alt"></i></a></td>';
 				} else {
 					echo '<td></td>';
 				}
