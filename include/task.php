@@ -23,7 +23,6 @@ include(DOCROOT.'/include/lang/'.$row_config_globale['language'].'.php');
 if((count($_SERVER['argv'])>2)||(count($_SERVER['argv'])==1)){
 	die(tr("SCHEDULE_NOT_POSSIBLE_TRANSACTION"));
 }
-/*
 if(!isset($_SERVER['SERVER_SOFTWARE']) && (php_sapi_name() == 'cli' || (is_numeric($_SERVER['argc']) && $_SERVER['argc'] > 0))) {
 	// Let's continue !
 } else {
@@ -32,7 +31,6 @@ if(!isset($_SERVER['SERVER_SOFTWARE']) && (php_sapi_name() == 'cli' || (is_numer
 	}
 	die(tr("SCHEDULE_NOT_POSSIBLE_TRANSACTION"));
 }
-*/
 $task_id = $_SERVER['argv'][1];
 $detail_task = $cnx->query('SELECT *
 	FROM '.$row_config_globale['table_crontab'] .'
@@ -208,6 +206,10 @@ if(count($detail_task)==0){
 		$mail->DKIM_passphrase	= $DKIM_passphrase;
 		$mail->DKIM_identity	= $DKIM_identity;
 	}
+	if ( $do_encrypt==1 ){
+		include(DOCROOT.'/include/lib/class.encrypt.php');
+		$en = new Encrypt();
+	}
 	while($begin<$total_suscribers){
 		$addr	= getAddress($cnx, $row_config_globale['table_email'],$detail_task[0]['list_id'],$begin,$limit,$detail_task[0]['msg_id']);
 		$to_send = count($addr);
@@ -233,8 +235,13 @@ if(count($detail_task)==0){
 				$mail->AddAddress(trim($addr[$i]['email']));
 				include(DOCROOT."/include/lib/switch_smtp.php");
 				$mail->XMailer = ' ';
+				if ( $do_encrypt==1 ){
+					$tracked_mail = $en->encrypt($addr[$i]['email']);
+				} else {
+					$tracked_mail = $addr[$i]['email'];
+				}
 				$mail->addCustomHeader("List-Unsubscribe",'<'. $row_config_globale['base_url'] . $tPath . 'subscription.php?i=' . $detail_task[0]['msg_id'] . '&list_id='
-					. $detail_task[0]['list_id'] . '&op=leave&email_addr=' . $addr[$i]['email'] . '&h=' . $addr[$i]['hash'] . '>'
+					. $detail_task[0]['list_id'] . '&op=leave&email_addr=' . $tracked_mail . '&h=' . $addr[$i]['hash'] . '>'
 					. ( $sender_email != '' ? ', <mailto:' . $sender_email . '?subject=unsubscribe>' : '' )
 				);
 				$body = "";
@@ -245,8 +252,8 @@ if(count($detail_task)==0){
 					$trac = "";
 				}
 				$replacements_adds = array(
-					'({user_email})' => $addr[$i]['email'],
-					'({newsletter_id})' => $detail_task[0]['msg_id']
+					'({param_user})' => $tracked_mail,
+					'({id_banner})' => $detail_task[0]['msg_id']
 					);
 				$message = preg_replace( array_keys( $replacements_adds ), array_values( $replacements_adds ), $message );
 				if ($format == "html"){
@@ -265,17 +272,19 @@ if(count($detail_task)==0){
 					$headtrc = "<hr noshade='' color='#D4D4D4' width='90%' size='1'>"
 						. "<div align='center' style='font-size:12px;font-family:arial,helvetica,sans-serif;padding-bottom:5px;color:#878e83;'>"
 						. tr("READ_ON_LINE", "<a href='" . $row_config_globale['base_url'] . $tPath . "online.php?i=" . $detail_task[0]['msg_id'] . "&list_id="
-						. $detail_task[0]['list_id'] . "&email_addr=" . $addr[$i]['email'] . "&h=" . $addr[$i]['hash'] . "'>") . "<br/>"
+						. $detail_task[0]['list_id'] . "&email_addr=" . $tracked_mail . "&h=" . $addr[$i]['hash'] . "'>") . "<br/>"
 						. tr("ADD_ADRESS_BOOK", $sender_email) . "<br/>";
 					$unsubLink = $headtrc . tr("UNSUBSCRIBE_LINK", "<a href='" . $row_config_globale['base_url'] . $tPath
-						. "subscription.php?i=" . $detail_task[0]['msg_id'] . "&list_id=". $detail_task[0]['list_id'] . "&op=leave&email_addr=" . $addr[$i]['email']
+						. "subscription.php?i=" . $detail_task[0]['msg_id'] . "&list_id=". $detail_task[0]['list_id'] . "&op=leave&email_addr=" . $tracked_mail
 						. "&h=" . $addr[$i]['hash'] . "' style='' target='_blank'>")
 						. $trac
 						. "</div></body></html>";
 				} else {
-					$body .= tr("READ_ON_LINE", "<a href='".$row_config_globale['base_url'].$tPath."online.php?i=" . $detail_task[0]['msg_id'] . "&list_id=".$detail_task[0]['list_id']."&email_addr=".$addr[$i]['email']."&h=".$addr[$i]['hash']."'>")."<br/>";
-					$body .= tr("ADD_ADRESS_BOOK", $newsletter['from_addr'])."<br/>";
-					$unsubLink = $row_config_globale['base_url'] . $tPath . 'subscription.php?i=' .$detail_task[0]['msg_id']. '&list_id=' . $detail_task[0]['list_id'] . '&op=leave&email_addr=' . urlencode($addr[$i]['email']).'&h=' . $addr[$i]['hash'];
+					$body .= tr("READ_ON_LINE", "<a href='".$row_config_globale['base_url'].$tPath."online.php?i=" 
+						. $detail_task[0]['msg_id'] . "&list_id=" . $detail_task[0]['list_id']."&email_addr="
+						. $tracked_mail . "&h=".$addr[$i]['hash'] . "'>") . "<br/>" . tr("ADD_ADRESS_BOOK", $newsletter['from_addr']) . "<br/>";
+					$unsubLink = $row_config_globale['base_url'] . $tPath . 'subscription.php?i=' .$detail_task[0]['msg_id']
+						. '&list_id=' . $detail_task[0]['list_id'] . '&op=leave&email_addr=' . urlencode($tracked_mail) . '&h=' . $addr[$i]['hash'];
 				}
 				$subject       = (strtoupper($row_config_globale['charset']) == "UTF-8" ? $subject : iconv("UTF-8", $row_config_globale['charset'], $subject));
 				$body          = $message . $unsubLink ;
