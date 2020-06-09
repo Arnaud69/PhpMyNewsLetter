@@ -199,6 +199,15 @@ echo "<form method='post' name='global_config' enctype='multipart/form-data'>
 									<input class='form-control' type='text' name='code_mailtester' size='50' value='" . ($code_mailtester!='' ? $code_mailtester : '') . "' />
 								</div>
 							</div>
+							<div class='col-md-6'>
+								<div class='form-group'><label>Encrypter les mails dans les liens de tracking ?</label><br>";
+									if($do_encrypt=='0'||$do_encrypt==''){
+										echo "<input type='radio' name='do_encrypt' value='0' checked='checked'>&nbsp;" . tr("NO") . "&nbsp;<input type='radio' name='do_encrypt' value='1'>&nbsp;" . tr("YES") . "";
+									}elseif($do_encrypt=='1'){
+										echo "<input type='radio' name='do_encrypt' value='0'>&nbsp;" . tr("NO") . "&nbsp;<input type='radio' name='do_encrypt' value='1' checked='checked'>&nbsp;" . tr("YES") . "";
+									}
+						echo "		</div>
+							</div>
 						</div>
 						<h4>" . tr("GCONFIG_TIMER_CROM_TIMER_AJAX") . "</h4>
 						<div class='row'>
@@ -223,9 +232,9 @@ echo "<form method='post' name='global_config' enctype='multipart/form-data'>
 							<div class='col-md-3'>
 								<div class='form-group'><label>". tr("GCONFIG_ALERT_END_SCHEDUL_TASK") . " ?</label><br>";
 								if($end_task=='0'||$end_task==''){
-									echo "<input type='radio' name='end_task' value='0' checked='checked'>" . tr("NO") . "&nbsp;<input type='radio' name='end_task' value='1'>" . tr("YES") . "";
+									echo "<input type='radio' name='end_task' value='0' checked='checked'>&nbsp;" . tr("NO") . "&nbsp;<input type='radio' name='end_task' value='1'>&nbsp;" . tr("YES") . "";
 								}elseif($end_task=='1'){
-									echo "<input type='radio' name='end_task' value='0'>" . tr("NO") . "&nbsp;<input type='radio' name='end_task' value='1' checked='checked'>" . tr("YES") . "";
+									echo "<input type='radio' name='end_task' value='0'>&nbsp;" . tr("NO") . "&nbsp;<input type='radio' name='end_task' value='1' checked='checked'>&nbsp;" . tr("YES") . "";
 								}
 						echo "		</div>
 							</div>";
@@ -233,9 +242,9 @@ echo "<form method='post' name='global_config' enctype='multipart/form-data'>
 							echo "<div class='col-md-4'>
 								<div class='form-group'><label>Recevoir un FREE sms de fin de tâche planifiée ?</label><br>";
 								if($end_task_sms=='0'){
-									echo "<input type='radio' name='end_task_sms' value='0' checked='checked'>" . tr("NO") . "&nbsp;<input type='radio' name='end_task_sms' value='1'>" . tr("YES") . "";
+									echo "<input type='radio' name='end_task_sms' value='0' checked='checked'>&nbsp;" . tr("NO") . "&nbsp;<input type='radio' name='end_task_sms' value='1'>&nbsp;" . tr("YES") . "";
 								}elseif($end_task_sms=='1'){
-									echo "<input type='radio' name='end_task_sms' value='0'>" . tr("NO") . "&nbsp;<input type='radio' name='end_task_sms' value='1' checked='checked'>" . tr("YES") . "";
+									echo "<input type='radio' name='end_task_sms' value='0'>&nbsp;" . tr("NO") . "&nbsp;<input type='radio' name='end_task_sms' value='1' checked='checked'>&nbsp;" . tr("YES") . "";
 								}
 								echo "</div>
 							</div>";
@@ -253,9 +262,9 @@ echo "<form method='post' name='global_config' enctype='multipart/form-data'>
 							<div class='col-md-2'>
 								<div class='form-group'><label>Tracking ?</label><br>";
 								if($row_config_globale['active_tracking']=='0'){
-									echo "<input type='radio' name='active_tracking' value='0' checked='checked'>" . tr("NO") . "&nbsp;<input type='radio' name='active_tracking' value='1'>" . tr("YES") . "";
+									echo "<input type='radio' name='active_tracking' value='0' checked='checked'>&nbsp;" . tr("NO") . "&nbsp;<input type='radio' name='active_tracking' value='1'>&nbsp;" . tr("YES") . "";
 								}elseif($row_config_globale['active_tracking']=='1'){
-									echo "<input type='radio' name='active_tracking' value='0'>" . tr("NO") . "&nbsp;<input type='radio' name='active_tracking' value='1' checked='checked'>" . tr("YES") . "";
+									echo "<input type='radio' name='active_tracking' value='0'>&nbsp;" . tr("NO") . "&nbsp;<input type='radio' name='active_tracking' value='1' checked='checked'>&nbsp;" . tr("YES") . "";
 								}
 						echo "		</div>
 							</div>
@@ -339,9 +348,9 @@ echo "<form method='post' name='global_config' enctype='multipart/form-data'>
 							<div class='col-md-4'>
 								<div class='form-group'><label>" . tr("GCONFIG_MESSAGE_SMTP_AUTH") . "</label><br>";
 									if($row_config_globale['smtp_auth']=="0"){
-										echo "<input type='radio' name='smtp_auth' value='0' checked='checked'>" . tr("NO") . "&nbsp;<input type='radio' name='smtp_auth' value='1'>" . tr("YES") . "";
+										echo "<input type='radio' name='smtp_auth' value='0' checked='checked'>&nbsp;" . tr("NO") . "&nbsp;<input type='radio' name='smtp_auth' value='1'>&nbsp;" . tr("YES") . "";
 									}elseif($row_config_globale['smtp_auth']=="1"){
-										echo "<input type='radio' name='smtp_auth' value='0'>" . tr("NO") . "&nbsp;<input type='radio' name='smtp_auth' value='1' checked='checked'>" . tr("YES") . "";
+										echo "<input type='radio' name='smtp_auth' value='0'>&nbsp;" . tr("NO") . "&nbsp;<input type='radio' name='smtp_auth' value='1' checked='checked'>&nbsp;" . tr("YES") . "";
 									}
 							echo "	</div>
 							</div>
