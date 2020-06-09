@@ -1354,7 +1354,7 @@ function saveConfigFile($version,$db_host, $db_login, $db_pass, $db_name, $db_co
 		$db_type = 'mysql', $serveur='shared', $environnement='dev', $timezone, 
 		$code_mailtester, $timer_ajax, $timer_cron, $free_id, $free_pass,
 		$end_task,$end_task_sms,$sub_validation_sms,$unsub_validation_sms,
-		$alert_unsub,$nb_backup,$key_dkim,$apis_available=0,$api_key='') {
+		$alert_unsub,$nb_backup,$key_dkim,$apis_available=0,$api_key='',$do_encrypt=0) {
 	$prefix = str_replace ( 'config','',$db_config_table);
 	$configfile = "<?php\nif ( !defined( '_CONFIG' ) ) {\n\tdefine('_CONFIG', 1);";
 	$configfile .= "\n\t$" . "db_type = '$db_type';";
@@ -1373,6 +1373,7 @@ function saveConfigFile($version,$db_host, $db_login, $db_pass, $db_name, $db_co
 	$configfile .= "\n\t$" . "timer_ajax = $timer_ajax;";
 	$configfile .= "\n\t$" . "timer_cron = $timer_cron;";
 	$configfile .= "\n\t$" . "end_task = $end_task;";
+	$configfile .= "\n\t$" . "do_encrypt = $do_encrypt;";
 	if($free_id!='' && $free_pass!='') {
 		$configfile .= "\n\t$" . "free_id = '$free_id';";
 		$configfile .= "\n\t$" . "free_pass = '$free_pass';";
@@ -1826,27 +1827,3 @@ function parseUrl($url) {
 	preg_match ( $r, $url, $out );
 	return $out;
 }
-/*
-function decode_rot13($string, $n=-13) {
-	$length = strlen($string);
-	$result = '';
-	for($i = 0; $i < $length; $i++) {
-		$ascii = ord($string{$i});
-		$rotated = $ascii;
-		if ($ascii > 64 && $ascii < 91) {
-			$rotated += $n;
-			$rotated > 90 && $rotated += -90 + 64;
-			$rotated < 65 && $rotated += -64 + 90;
-		} elseif ($ascii > 96 && $ascii < 123) {
-			$rotated += $n;
-			$rotated > 122 && $rotated += -122 + 96;
-			$rotated < 97 && $rotated += -96 + 122;
-		}
-		$result .= chr($rotated);
-	}
-	return $result;
-}
-$enc = rotate('string', 6);
-echo "Encoded: $enc<br/>\n";
-echo 'Decoded: ' . rotate($enc, -6);
-*/
