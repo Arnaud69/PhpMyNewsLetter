@@ -29,24 +29,28 @@ use Exception;
 require 'include/lib/PHPMailer/src/Exception.php';
 require 'include/lib/PHPMailer/src/PHPMailer.php';
 require 'include/lib/PHPMailer/src/SMTP.php';
-?>
-<!DOCTYPE HTML>
-<html lang="<?php echo tr( "LN" ); ?>">
+if ( $do_encrypt==1 ){
+	include('include/lib/class.encrypt.php');
+	$en = new Encrypt();
+	$email_sub = $en->decrypt($email_addr);
+	$email_addr = $email_sub;
+} else {
+	$email_sub = $email_addr;
+}
+echo '<!DOCTYPE HTML>
+<html lang="' . tr( "LN" ) . '">
 	<head>
 		<meta charset="utf-8" />
-		<title><?php  echo tr( "NEWSLETTER_TITLE" ); ?></title>
+		<title>' . tr( "NEWSLETTER_TITLE" ) . '</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="js/wysiwyg/jquery-1.10.2.min.js"></script>
 		<script src="js/wysiwyg/jquery-ui.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<link href="//code.jquery.com/ui/1.12.0/themes/redmond/jquery-ui.css" rel="stylesheet" media="screen">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" rel="stylesheet">
-		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-		<!-- Latest compiled and minified JavaScript -->
 		<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
-		<!-- (Optional) Latest compiled and minified JavaScript translation files -->
-		<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/defaults-<?php echo tr("I18N_LNG");?>.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/defaults-' . tr("I18N_LNG") . '.min.js"></script>
 		<!--[if lt IE 9]>
 			<script src="//oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
 			<script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -54,12 +58,11 @@ require 'include/lib/PHPMailer/src/SMTP.php';
 	</head>
 	<body>
 		<div class="container-fluid">
-			<div class="col-md-12">
-			<?php 
+			<div class="col-md-12">';
 			if ( isset( $list_id ) && !empty( $list_id ) && isValidNewsletter( $cnx, $row_config_globale[ 'table_listsconfig' ], $list_id ) && isset( $email_addr ) ) {
 				if ( !validEmailAddress( $email_addr ) ) {
-					echo '<header><h4>' . tr( "SUBSCRIPTION_TITLE" ) . '</h4></header>';
-					echo "<h4 class='alert alert-danger'>" . tr( "EMAIL_ADDRESS_NOT_VALID" ) . "</div>";
+					echo '<header><h4>' . tr( "SUBSCRIPTION_TITLE" ) . '</h4></header>
+						<h4 class="alert alert-danger">' . tr( "EMAIL_ADDRESS_NOT_VALID" ) . '</div>';
 					exit( );
 				}
 				switch ( $op ) {
@@ -337,8 +340,7 @@ require 'include/lib/PHPMailer/src/SMTP.php';
 						break;
 				}
 			}
-			?>
-			</div>
+echo '			</div>
 		</div>
 	</body>
-</html>
+</html>';

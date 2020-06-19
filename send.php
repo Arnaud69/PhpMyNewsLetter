@@ -28,6 +28,10 @@ use Exception;
 require 'include/lib/PHPMailer/src/Exception.php';
 require 'include/lib/PHPMailer/src/PHPMailer.php';
 require 'include/lib/PHPMailer/src/SMTP.php';
+if ( $do_encrypt==1 ){
+	include('include/lib/class.encrypt.php');
+	$en = new Encrypt();
+}
 $step         = (empty($_GET['step']) ? "" : $_GET['step']);
 $subject      = (!empty($_SESSION['subject'])) ? $_SESSION['subject'] : '';
 $message      = (!empty($_SESSION['message'])) ? $_SESSION['message'] : '';
@@ -87,8 +91,8 @@ switch ($step) {
 		$mail->ContentType	= "text/html";
 		$mail->Encoding		= "quoted-printable";
 		$mail->PluginDir	= "include/lib/";
-		$msg			= get_message($cnx, $row_config_globale['table_archives'], $msg_id);
-		$newsletter		= getConfigSender($cnx, $row_config_globale['table_senders'], $msg['sender_email']);
+		$msg				= get_message($cnx, $row_config_globale['table_archives'], $msg_id);
+		$newsletter			= getConfigSender($cnx, $row_config_globale['table_senders'], $msg['sender_email']);
 		$sender_email		= @$newsletter['email'];
 		$sender_name		= @$newsletter['name_organisation'];
 		$reply_email		= @$newsletter['email_reply'];
@@ -179,10 +183,6 @@ switch ($step) {
 			$mail->DKIM_selector   = $DKIM_selector;
 			$mail->DKIM_passphrase = $DKIM_passphrase;
 			$mail->DKIM_identity   = $DKIM_identity;
-		}
-		if ( $do_encrypt==1 ){
-			include('include/lib/class.encrypt.php');
-			$en = new Encrypt();
 		}
 		$to_send              = count($addr);
 		$view_last_send_mails = "";
@@ -354,7 +354,6 @@ switch ($step) {
 					}
 				}
 			}
-			
 			if ($_SESSION['dr_log'] == 'Y') {
 				loggit($_SESSION['dr_id_user'] . '.log', $_SESSION['dr_id_user'] . ' a fini un envoi de campagne "' . $subject . '" par "' . $sender_email . '" en ajax');
 			}
@@ -385,7 +384,6 @@ switch ($step) {
 		$sender_email	= $_SESSION['sender_email'];
 		$draft		= $_SESSION['draft'];
 		$preheader	= $_SESSION['preheader'];
-
 		if ($_SESSION['dr_log'] == 'Y') {
 			loggit($_SESSION['dr_id_user'] . '.log', $_SESSION['dr_id_user'] . ' a commencé un envoi de campagne "' . $subject . '" par "' . $sender_email . '" en ajax');
 		}
